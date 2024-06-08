@@ -19,7 +19,7 @@ router.post("/create", authenticateUser, async (req, res) => {
         .status(403)
         .send({ response: false, error: "Only companies can create adverts." });
     }
-    console.log(user)
+    console.log(user);
     const advert = await Advert.findOne({ title });
     if (advert) {
       return res
@@ -59,7 +59,7 @@ router.post("/create", authenticateUser, async (req, res) => {
   }
 });
 
-router.get("/getall", async (req, res) => {
+router.get("/", authenticateUser, async (req, res) => {
   try {
     const { user } = req;
     if (!user) {
@@ -79,7 +79,7 @@ router.get("/getall", async (req, res) => {
 });
 
 // Get own adverts
-router.get("/own", async (req, res) => {
+router.get("/own", authenticateUser, async (req, res) => {
   try {
     const { user } = req;
     if (!user) {
@@ -104,7 +104,7 @@ router.get("/own", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", authenticateUser, async (req, res) => {
   try {
     const { user } = req;
     if (!user) {
@@ -112,7 +112,7 @@ router.get("/:id", async (req, res) => {
         .status(403)
         .send({ response: false, error: "You are unauthorized." });
     }
-    const advert = await Advert.find({ _id: req.params.id });
+    const advert = await Advert.findOne({ _id: req.params.id });
     res.status(200).send({ response: true, advert });
   } catch (error) {
     console.error("Error fetching own adverts:", error);
@@ -124,7 +124,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Edit advert by ID
-router.put("/:id", async (req, res) => {
+router.put("/:id", authenticateUser, async (req, res) => {
   try {
     const { user } = req;
     if (!user) {
@@ -152,7 +152,6 @@ router.put("/:id", async (req, res) => {
     }
     const { id } = req.params;
     const {
-      company,
       title,
       field,
       requirements,
@@ -162,7 +161,6 @@ router.put("/:id", async (req, res) => {
 
     // Basic validation
     if (
-      !company ||
       !title ||
       !field ||
       !requirements ||
@@ -172,13 +170,13 @@ router.put("/:id", async (req, res) => {
       return res.status(400).send({
         response: false,
         error:
-          "All fields are required: company, title, field, requirements, foreignLanguages, and department.",
+          "All fields are required: title, field, requirements, foreignLanguages, and department.",
       });
     }
 
     const updatedAdvert = await Advert.findByIdAndUpdate(
       id,
-      { company, title, field, requirements, foreignLanguages, department },
+      { title, field, requirements, foreignLanguages, department },
       { new: true, runValidators: true }
     );
 

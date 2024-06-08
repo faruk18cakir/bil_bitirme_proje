@@ -114,7 +114,7 @@ router.post("/login", async (req, res) => {
       { expiresIn: "3h" }
     );
 
-    res.send({ response: true, accessToken: token, expiresAt }); // Token 1 saat geçerli olacak şekilde oluşturuldu
+    res.send({ response: true, accessToken: token, role: user.role, expiresAt }); // Token 1 saat geçerli olacak şekilde oluşturuldu
   } catch (error) {
     console.error("Kullanıcı güncelleme sırasında bir hata oluştu:", error);
     res.status(500).send("Kullanıcı güncellenirken bir hata oluştu.");

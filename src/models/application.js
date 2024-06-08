@@ -10,6 +10,14 @@ const applicationSchema = new mongoose.Schema(
         maxDepth: 1,
       },
     },
+    advert: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Advert",
+      autopopulate: {
+        select: "_id title",
+        maxDepth: 1,
+      },
+    },
     status: String,
     score: Number,
     isScored: Boolean,

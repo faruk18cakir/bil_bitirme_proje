@@ -4,7 +4,7 @@ const advertSchema = new mongoose.Schema(
   {
     company: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Company",
       autopopulate: {
         select: "_id companyName",
         maxDepth: 1,

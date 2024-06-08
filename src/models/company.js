@@ -5,10 +5,8 @@ const companySchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      autopopulate: {
-        select: "_id username email",
-        maxDepth: 1,
-      },
+      select: "_id username email",
+      autopopulate: true,
     },
     companyName: String,
     about: String,
