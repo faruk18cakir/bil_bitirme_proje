@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const userRoutes = require("./src/routes/userRoutes");
-const contentRoutes = require("./src/routes/contentRoutes");
+const userRoutes = require("./src/routes/user.js");
+const advertRouter = require("./src/routes/advert");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
@@ -33,4 +33,4 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 // Kullanıcı route'larını tanımlayın
 app.use("/api/users", userRoutes);
-app.use("/api/contents", contentRoutes);
+app.use("/api/adverts", advertRouter);

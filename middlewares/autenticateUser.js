@@ -7,7 +7,6 @@ function verifyToken(token) {
     let decoded = jwt.verify(token, config.get("jwtSettings").privateKey, {
       ignoreExpiration: true,
     });
-    console.log(decoded)
     if (decoded.expAt < moment().unix()) {
       return {
         verified: false,
@@ -27,7 +26,6 @@ function verifyToken(token) {
 
 function authenticateUser(req, res, next) {
   let token = req?.header("Authorization");
-  console.log(token)
   if (!token) {
     return res
       .status(401)
@@ -35,7 +33,6 @@ function authenticateUser(req, res, next) {
   } else {
     token = token.split(" ")[1];
     let result = verifyToken(token);
-    console.log(result)
     if (!result.verified) {
       return res.status(403).json({ response: false, message: result.error });
     } else {

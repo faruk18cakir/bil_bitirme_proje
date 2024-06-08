@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
     email: String,
     role: String,
   },
-  { collection: "users" }
+  { id: false, timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);

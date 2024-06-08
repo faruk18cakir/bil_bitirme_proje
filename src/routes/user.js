@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const secretKey = "yourSecretKey";
-const User = require("../models/users");
+const User = require("../models/user");
 const Intern = require("../models/intern");
 const Company = require("../models/company");
 const config = require("config");
@@ -45,6 +45,14 @@ router.post("/register", async (req, res) => {
         .status(400)
         .json({ response: false, error: "Email already exists." });
     }
+
+    const user1 = await User.findOne({ username: username });
+    if (user1) {
+      return res
+        .status(400)
+        .json({ response: false, error: "username already exists." });
+    }
+
 
     const newUser = await User.create({
       username,
@@ -89,6 +97,8 @@ router.post("/login", async (req, res) => {
     const { privateKey, issuer, expirationInMinutes } =
       config.get("jwtSettings");
     const expiresAt = moment().add(expirationInMinutes, "minutes").unix();
+    const company = await Company.findOne({ user: user._id });
+    const intern = await Intern.findOne({ user: user._id });
     const token = jwt.sign(
       {
         id: user._id,
@@ -96,6 +106,8 @@ router.post("/login", async (req, res) => {
         email: user.email,
         role: user.role,
         expAt: expiresAt,
+        company: company?._id,
+        intern: intern?._id,
         issuer,
       },
       privateKey,
@@ -183,7 +195,7 @@ router.put("/company-profile", authenticateUser, async (req, res) => {
   try {
     const { user } = req;
     const { companyName, about, phoneNumber, faxNumber, address, sector, taxNumber } = req.body;
-
+console.log(req.body)
     if(user.role !== "company") {
       return res.status(403).json({ response: false, error: "You are not authorized to update this profile." });
     }
