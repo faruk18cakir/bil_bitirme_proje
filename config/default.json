@@ -5,7 +5,7 @@
     "issuer": "Sina Sadigh",
     "expirationInMinutes": 180
   },
-  "db": "mongodb://127.0.0.1:27017/staj",
+  "db": "mongodb+srv://sinasadigh:OGxLnJaE3DwTzFMK@cluster0.3qhm55u.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
   "dbOptions": {
     "autoIndex": true,
     "socketTimeoutMS": 30000
