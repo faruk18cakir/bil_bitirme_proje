@@ -16,8 +16,8 @@ const applicationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Advert",
       autopopulate: {
-        select: "_id title",
-        maxDepth: 1,
+        select: "_id title company",
+        maxDepth: 2,
       },
     },
     status: String,

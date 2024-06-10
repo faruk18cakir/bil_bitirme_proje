@@ -8,7 +8,7 @@ const advertSchema = new mongoose.Schema(
       ref: "Company",
       autopopulate: {
         select: "_id companyName",
-        maxDepth: 1,
+        maxDepth: 2,
       },
     },
     title: String,
