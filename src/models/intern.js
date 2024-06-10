@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const autopopulate = require("mongoose-autopopulate");
+
 
 const internSchema = new mongoose.Schema(
   {
@@ -29,6 +31,7 @@ const internSchema = new mongoose.Schema(
   },
   { id: false, timestamps: true }
 );
+internSchema.plugin(autopopulate);
 
 const Intern = mongoose.model("Intern", internSchema);
 

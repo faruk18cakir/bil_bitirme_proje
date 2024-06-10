@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const autopopulate = require("mongoose-autopopulate");
 
 const advertSchema = new mongoose.Schema(
   {
@@ -18,6 +19,8 @@ const advertSchema = new mongoose.Schema(
   },
   { id: false, timestamps: true }
 );
+advertSchema.plugin(autopopulate);
+
 
 const Advert = mongoose.model("Advert", advertSchema);
 

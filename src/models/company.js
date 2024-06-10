@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const autopopulate = require("mongoose-autopopulate");
+
 
 const companySchema = new mongoose.Schema(
   {
@@ -18,6 +20,8 @@ const companySchema = new mongoose.Schema(
   },
   { id: false, timestamps: true }
 );
+companySchema.plugin(autopopulate);
+
 
 const Company = mongoose.model("Company", companySchema);
 

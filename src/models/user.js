@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const autopopulate = require("mongoose-autopopulate");
+
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,6 +11,7 @@ const userSchema = new mongoose.Schema(
   },
   { id: false, timestamps: true }
 );
+userSchema.plugin(autopopulate);
 
 const User = mongoose.model("User", userSchema);
 
