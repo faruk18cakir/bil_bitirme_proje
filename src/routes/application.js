@@ -33,7 +33,7 @@ router.post("/", authenticateUser, async (req, res) => {
         .send({ response: false, error: "Advert not found." });
     }
     const newApplication = new Application({
-      intern: user._id,
+      intern: user.intern,
       advert,
       status: "pending",
       isScored: false,
