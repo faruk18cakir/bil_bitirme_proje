@@ -12,8 +12,8 @@ const advertSchema = new mongoose.Schema(
     },
     title: String,
     field: String,
-    requirements: [String],
-    foreignLanguages: [String],
+    requirements: String,
+    foreignLanguages: String,
     department: String,
   },
   { id: false, timestamps: true }

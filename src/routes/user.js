@@ -156,14 +156,14 @@ router.put("/intern-profile", authenticateUser, async (req, res) => {
     if (languages && !Array.isArray(languages)) {
       return res.status(400).json({ response: false, error: "Languages must be an array of strings." });
     }
-    if (teamWorkSkill && !Array.isArray(teamWorkSkill)) {
-      return res.status(400).json({ response: false, error: "Team work skill must be an array of strings." });
+    if (teamWorkSkill && typeof teamWorkSkill !== "string") {
+      return res.status(400).json({ response: false, error: "Team work skill must be a string." });
     }
-    if (communicationSkill && !Array.isArray(communicationSkill)) {
-      return res.status(400).json({ response: false, error: "Communication skill must be an array of strings." });
+    if (communicationSkill && typeof communicationSkill !== "string") {
+      return res.status(400).json({ response: false, error: "Communication skill must be a string." });
     }
-    if (analyticalSkill && !Array.isArray(analyticalSkill)) {
-      return res.status(400).json({ response: false, error: "Analytical skill must be an array of strings." });
+    if (analyticalSkill && typeof analyticalSkill !== "string") {
+      return res.status(400).json({ response: false, error: "Analytical skill must be a string." });
     }
     if (department && typeof department !== "string") {
       return res.status(400).json({ response: false, error: "Department must be a string." });

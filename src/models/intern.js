@@ -22,10 +22,10 @@ const internSchema = new mongoose.Schema(
     desiredField: String,
     skills: [String],
     languages: [String],
-    teamWorkSkill: [String],
-    communicationSkill: [String],
-    analyticalSkill: [String],
-    hobbies: [String],
+    teamWorkSkill: String,
+    communicationSkill: String,
+    analyticalSkill: String,
+    hobbies: String,
   },
   { id: false, timestamps: true }
 );

@@ -123,11 +123,11 @@ router.get("/own", authenticateUser, async (req, res) => {
 
     let applications;
     if (user.role === "intern") {
-      applications = await Application.find({ intern: user._id })
+      applications = await Application.find({ intern: user.intern })
         .populate("intern")
         .populate("advert");
     } else if (user.role === "company") {
-      const adverts = await Advert.find({ company: user._id }).select("_id");
+      const adverts = await Advert.find({ company: user.company }).select("_id");
       applications = await Application.find({
         advert: { $in: adverts.map((advert) => advert._id) },
       })
