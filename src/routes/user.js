@@ -17,9 +17,7 @@ router.post("/register", async (req, res) => {
 
     // Basic validation
     if (!username) {
-      return res
-        .status(400)
-        .json({ response: false, error: "Username is required." });
+      return res.status(400).json({ response: false, error: "Username is required." });
     }
     if (!password || password.length < 6) {
       return res.status(400).json({
@@ -28,9 +26,7 @@ router.post("/register", async (req, res) => {
       });
     }
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      return res
-        .status(400)
-        .json({ response: false, error: "Invalid email address." });
+      return res.status(400).json({ response: false, error: "Invalid email address." });
     }
     if (!role || (role !== "company" && role !== "intern")) {
       return res.status(400).json({
@@ -41,18 +37,13 @@ router.post("/register", async (req, res) => {
 
     const user = await User.findOne({ email: email });
     if (user) {
-      return res
-        .status(400)
-        .json({ response: false, error: "Email already exists." });
+      return res.status(400).json({ response: false, error: "Email already exists." });
     }
 
     const user1 = await User.findOne({ username: username });
     if (user1) {
-      return res
-        .status(400)
-        .json({ response: false, error: "username already exists." });
+      return res.status(400).json({ response: false, error: "username already exists." });
     }
-
 
     const newUser = await User.create({
       username,
@@ -72,9 +63,7 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    res
-      .status(201)
-      .send({ response: true, message: "User successfully added." });
+    res.status(201).send({ response: true, message: "User successfully added." });
   } catch (error) {
     console.error("Error adding user:", error);
     res.status(500).send("An error occurred while adding the user.");
@@ -90,12 +79,9 @@ router.post("/login", async (req, res) => {
     });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ message: "Kullanıcı adı ya da şifre hatalı." });
+      return res.status(404).json({ message: "Kullanıcı adı ya da şifre hatalı." });
     }
-    const { privateKey, issuer, expirationInMinutes } =
-      config.get("jwtSettings");
+    const { privateKey, issuer, expirationInMinutes } = config.get("jwtSettings");
     const expiresAt = moment().add(expirationInMinutes, "minutes").unix();
     const company = await Company.findOne({ user: user._id });
     const intern = await Intern.findOne({ user: user._id });
@@ -134,10 +120,7 @@ router.get("/profile", authenticateUser, async (req, res) => {
 
     res.status(200).json({ user, profile });
   } catch (error) {
-    console.error(
-      "Kullanıcı profili getirme sırasında bir hata oluştu:",
-      error
-    );
+    console.error("Kullanıcı profili getirme sırasında bir hata oluştu:", error);
     res.status(500).send("Kullanıcı profili getirirken bir hata oluştu.");
   }
 });
@@ -145,13 +128,27 @@ router.get("/profile", authenticateUser, async (req, res) => {
 router.put("/intern-profile", authenticateUser, async (req, res) => {
   try {
     const { user } = req;
-    const { skills, languages, teamWorkSkill, communicationSkill, analyticalSkill, department, class: userClass, average } = req.body;
-    if(user.role !== "intern") {
+    const {
+      skills,
+      languages,
+      birthDate,
+      teamWorkSkill,
+      communicationSkill,
+      analyticalSkill,
+      department,
+      class: userClass,
+      average,
+      hobbies,
+    } = req.body;
+    if (user.role !== "intern") {
       return res.status(403).json({ response: false, error: "You are not authorized to update this profile." });
     }
     // Basic validation
     if (skills && !Array.isArray(skills)) {
       return res.status(400).json({ response: false, error: "Skills must be an array of strings." });
+    }
+    if (hobbies && !Array.isArray(hobbies)) {
+      return res.status(400).json({ response: false, error: "hobbies must be an array of strings." });
     }
     if (languages && !Array.isArray(languages)) {
       return res.status(400).json({ response: false, error: "Languages must be an array of strings." });
@@ -164,6 +161,9 @@ router.put("/intern-profile", authenticateUser, async (req, res) => {
     }
     if (analyticalSkill && typeof analyticalSkill !== "string") {
       return res.status(400).json({ response: false, error: "Analytical skill must be a string." });
+    }
+    if (birthDate && typeof birthDate !== "string") {
+      return res.status(400).json({ response: false, error: "birthDate skill must be a string." });
     }
     if (department && typeof department !== "string") {
       return res.status(400).json({ response: false, error: "Department must be a string." });
@@ -195,11 +195,11 @@ router.put("/company-profile", authenticateUser, async (req, res) => {
   try {
     const { user } = req;
     const { companyName, about, phoneNumber, faxNumber, address, sector, taxNumber } = req.body;
-console.log(req.body)
-    if(user.role !== "company") {
+    console.log(req.body);
+    if (user.role !== "company") {
       return res.status(403).json({ response: false, error: "You are not authorized to update this profile." });
     }
-    
+
     // Basic validation
     if (companyName && typeof companyName !== "string") {
       return res.status(400).json({ response: false, error: "Company name must be a string." });
@@ -239,7 +239,6 @@ console.log(req.body)
   }
 });
 
-
 //_id kullanılarak user güncelleme.
 router.put("/updateUser/:_id", async (req, res) => {
   const database = client.db("stajUygulaması"); // Veritabanı adı
@@ -249,10 +248,7 @@ router.put("/updateUser/:_id", async (req, res) => {
   const { name, surname, email, password, age } = req.body;
   const userCheck = await collection.findOne({ _id: _id });
 
-  const user = await collection.updateOne(
-    { _id: _id },
-    { $set: { name, surname, email, password, age } }
-  );
+  const user = await collection.updateOne({ _id: _id }, { $set: { name, surname, email, password, age } });
   if (!userCheck) {
     return res.status(404).json({ message: "yok" });
   }

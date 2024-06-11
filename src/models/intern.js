@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const autopopulate = require("mongoose-autopopulate");
 
-
 const internSchema = new mongoose.Schema(
   {
     user: {
@@ -14,6 +13,7 @@ const internSchema = new mongoose.Schema(
     },
     firstName: String,
     lastName: String,
+    birthDate: String,
     phoneNumber: String,
     address: String,
     university: String,
@@ -27,7 +27,7 @@ const internSchema = new mongoose.Schema(
     teamWorkSkill: String,
     communicationSkill: String,
     analyticalSkill: String,
-    hobbies: String,
+    hobbies: [String],
   },
   { id: false, timestamps: true }
 );
