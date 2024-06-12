@@ -39,6 +39,11 @@ console.log(req.body)
         .status(400)
         .json({ response: false, message: "Comment should be provided" });
     }
+    if (score < 1 || score > 5) {
+      return res
+        .status(400)
+        .json({ response: false, message: "Score should be between 1 and 5" });
+    }
     let reviewer = user.role
     if (user.role === "company") {
       company = user.company;
