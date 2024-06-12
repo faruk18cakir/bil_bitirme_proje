@@ -101,7 +101,7 @@ router.patch("/accept/:id", authenticateUser, async (req, res) => {
 
     const advert = await Advert.findById(application.advert._id);
 
-    if (advert.company.toString() !== user.company.toString()) {
+    if (advert.company?._id.toString() !== user.company.toString()) {
       return res.status(403).send({ response: false, error: "Unauthorized to accept this application." });
     }
 
@@ -125,7 +125,6 @@ router.patch("/reject/:id", authenticateUser, async (req, res) => {
       return res.status(403).send({ response: false, error: "Only companies can accept applications." });
     }
 
-    console.log(id)
     const application = await Application.findById(id).populate("advert");
 
     if (!application) {
@@ -134,7 +133,7 @@ router.patch("/reject/:id", authenticateUser, async (req, res) => {
 
     const advert = await Advert.findById(application.advert._id);
 
-    if (advert.company.toString() !== user.company.toString()) {
+    if (advert.company._id.toString() !== user.company.toString()) {
       return res.status(403).send({ response: false, error: "Unauthorized to accept this application." });
     }
 
