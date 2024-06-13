@@ -19,6 +19,14 @@ const ReviewSchema = new Schema(
         maxDepth: 2,
       },
     },
+    advert: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Advert",
+        autopopulate: {
+          select: "_id title",
+          maxDepth: 2,
+        },
+      },
     reviewer: {
       type: String,
       required: true,

@@ -2,7 +2,7 @@
   "applicationPort": 3000,
   "jwtSettings": {
     "privateKey": "(G+KbPeShVmYp3s6v9y$B&E)H@McQfTjY",
-    "issuer": "Sina Sadigh",
+    "issuer": "Omer faruk",
     "expirationInMinutes": 180
   },
   "db": "mongodb+srv://sinasadigh:OGxLnJaE3DwTzFMK@cluster0.3qhm55u.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",

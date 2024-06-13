@@ -11,9 +11,8 @@ const { authenticateUser } = require("../../middlewares/autenticateUser");
 
 router.post("/", authenticateUser, async (req, res) => {
   try {
-    let { company, intern, score, comment } = req.body;
+    let { company, intern, score, comment, advert } = req.body;
     const { user } = req;
-console.log(req.body)
     if (!user) {
       return res
         .status(401)
@@ -24,10 +23,11 @@ console.log(req.body)
         .status(400)
         .json({ response: false, message: "Intern should be provided" });
     }
-    if (user.role === "intern" && !company) {
-      return res
-        .status(400)
-        .json({ response: false, message: "Company should be provided" });
+    if (user.role === "intern" && !company && !advert) {
+      return res.status(400).json({
+        response: false,
+        message: "Company or advert should be provided",
+      });
     }
     if (!score) {
       return res
@@ -44,14 +44,39 @@ console.log(req.body)
         .status(400)
         .json({ response: false, message: "Score should be between 1 and 5" });
     }
-    let reviewer = user.role
+    let reviewer = user.role;
     if (user.role === "company") {
       company = user.company;
     }
     if (user.role === "intern") {
       intern = user.intern;
     }
-    if (await Review.exists({ company, intern, reviewer })) {
+    if (advert) {
+      const dbAdvert = await Advert.findById(advert);
+      if (!dbAdvert) {
+        return res
+          .status(404)
+          .send({ response: false, error: "Advert not found." });
+      }
+    }
+    if (company) {
+      const dbCompany = await Company.findById(company);
+      if (!dbCompany) {
+        return res
+          .status(404)
+          .send({ response: false, error: "Company not found." });
+      }
+    }
+    if (intern) {
+      const dbIntern = await Intern.findById(intern);
+      if (!dbIntern) {
+        return res
+          .status(404)
+          .send({ response: false, error: "Intern not found." });
+      }
+    }
+
+    if (await Review.exists({ company, intern, reviewer, advert })) {
       return res.status(400).json({
         response: false,
         message: `You have already reviewed this`,
@@ -63,6 +88,7 @@ console.log(req.body)
       reviewer,
       score,
       comment,
+      advert,
     });
 
     await review.save();
@@ -79,6 +105,22 @@ router.get("/companies/:companyId", authenticateUser, async (req, res) => {
     const { companyId } = req.params;
 
     const reviews = await Review.find({ company: companyId })
+      .populate("company")
+      .populate("intern");
+    const averageScore =
+      reviews.reduce((acc, review) => acc + review.score, 0) / reviews.length ||
+      0;
+
+    res.status(200).json({ reviews, averageScore });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+router.get("/adverts/:advertId", authenticateUser, async (req, res) => {
+  try {
+    const { advertId } = req.params;
+
+    const reviews = await Review.find({ advert: advertId })
       .populate("company")
       .populate("intern");
     const averageScore =
