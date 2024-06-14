@@ -14,9 +14,10 @@ router.get("/", authenticateUser, async (req, res) => {
     matchArray = [];
     for (let m of matches.matches) {
       let isApplied = false;
+
       const application = await Application.exists({
         advert: m.advert_id._id,
-        intern_id: user.intern._id,
+        intern: user.intern,
       });
       if (application) {
         isApplied = true;
